@@ -157,6 +157,10 @@ form.addEventListener('submit', async (e) => {
     setStatus('Passwords do not match.');
     return;
   }
+  // Fallback: if callback hasn't fired yet, grab the token directly.
+  if (!turnstileToken && window.turnstile && turnstileWidgetId !== null) {
+    try { turnstileToken = window.turnstile.getResponse(turnstileWidgetId); } catch {}
+  }
   if (!turnstileToken) {
     setStatus('Please complete the verification check.');
     return;
