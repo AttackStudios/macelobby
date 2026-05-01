@@ -1,6 +1,5 @@
 // ============================================================
 // EDIT THIS LINE after deploying your Cloudflare Worker.
-// You'll get the URL after running `wrangler deploy`.
 // ============================================================
 const AUTH_API = 'https://macelobby-auth.jhsuttonca.workers.dev';
 
@@ -11,10 +10,11 @@ const form = $('auth-form');
 const submitBtn = $('submit-btn');
 const statusEl = $('status');
 const successBox = $('success');
-const confirmLabel = $('confirm-label');
+const confirmField = $('confirm-field');
 const confirmInput = $('confirm');
 const codeInput = $('code');
 const passwordInput = $('password');
+const revealBtn = $('reveal-password');
 
 let mode = 'signup';
 
@@ -29,11 +29,11 @@ function setMode(m) {
     t.classList.toggle('active', t.dataset.mode === m);
   });
   if (m === 'signup') {
-    confirmLabel.style.display = '';
+    confirmField.style.display = '';
     confirmInput.required = true;
     submitBtn.textContent = 'Sign Up';
   } else {
-    confirmLabel.style.display = 'none';
+    confirmField.style.display = 'none';
     confirmInput.required = false;
     submitBtn.textContent = 'Log In';
   }
@@ -44,14 +44,25 @@ document.querySelectorAll('.tab').forEach((t) => {
 });
 
 codeInput.addEventListener('input', () => {
+  const start = codeInput.selectionStart;
   codeInput.value = codeInput.value.toUpperCase();
+  codeInput.setSelectionRange(start, start);
+});
+
+revealBtn.addEventListener('click', () => {
+  const pressed = revealBtn.getAttribute('aria-pressed') === 'true';
+  const next = !pressed;
+  revealBtn.setAttribute('aria-pressed', String(next));
+  revealBtn.setAttribute('aria-label', next ? 'Hide password' : 'Show password');
+  passwordInput.type = next ? 'text' : 'password';
+  passwordInput.focus();
 });
 
 async function init() {
   const params = new URLSearchParams(location.search);
   const code = params.get('code');
   if (!code) {
-    subtitle.textContent = 'Join the Minecraft server to get your code.';
+    subtitle.textContent = 'Join the Minecraft server to get a code.';
     return;
   }
   const upper = code.toUpperCase();
@@ -62,7 +73,7 @@ async function init() {
   try {
     r = await fetch(`${AUTH_API}/api/check-code?code=${encodeURIComponent(upper)}`);
   } catch (e) {
-    setStatus('Cannot reach auth server. Try again in a moment.');
+    setStatus('Cannot reach server. Try again in a moment.');
     subtitle.textContent = '';
     return;
   }
@@ -120,7 +131,6 @@ form.addEventListener('submit', async (e) => {
     return;
   }
 
-  // Success — hide form, show welcome
   form.hidden = true;
   tabs.hidden = true;
   statusEl.style.display = 'none';
