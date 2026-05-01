@@ -222,6 +222,23 @@ body::before {
 .reveal[aria-pressed="true"] .eye-open { display: none; }
 .reveal[aria-pressed="true"] .eye-closed { display: block; }
 
+.captcha {
+  margin-top: 4px;
+  display: flex;
+  justify-content: center;
+  min-height: 65px;
+  opacity: 0;
+  animation: childIn 540ms var(--quint-out) 580ms forwards;
+}
+
+.captcha:empty::before {
+  content: 'Loading verification…';
+  font-size: 12px;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+  align-self: center;
+}
+
 .submit {
   margin-top: 6px;
   font: inherit;
@@ -236,7 +253,7 @@ body::before {
   cursor: pointer;
   transition: transform 180ms var(--snap), box-shadow 220ms var(--snap), background 180ms var(--snap), opacity 180ms;
   opacity: 0;
-  animation: childIn 540ms var(--quint-out) 580ms forwards;
+  animation: childIn 540ms var(--quint-out) 640ms forwards;
 }
 
 .submit:hover {
@@ -285,5 +302,5 @@ body::before {
     transition-duration: 0ms !important;
   }
   .card { opacity: 1; transform: none; }
-  .brand h1, .brand-id, .brand-sub, .tabs, .field, .submit { opacity: 1; transform: none; }
+  .brand h1, .brand-id, .brand-sub, .tabs, .field, .captcha, .submit { opacity: 1; transform: none; }
 }

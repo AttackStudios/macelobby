@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MaceLobby — Sign In</title>
   <link rel="stylesheet" href="style.css" />
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 <body>
   <main class="card" id="card">
@@ -46,6 +47,8 @@
         <input id="confirm" name="confirm" type="password" minlength="8" placeholder=" " />
         <label for="confirm">Confirm password</label>
       </div>
+
+      <div class="captcha" id="turnstile-container"></div>
 
       <button type="submit" class="submit" id="submit-btn">Sign Up</button>
     </form>

@@ -1,7 +1,13 @@
 // ============================================================
-// EDIT THIS LINE after deploying your Cloudflare Worker.
-// ============================================================
+// EDIT after deploying your Cloudflare Worker:
 const AUTH_API = 'https://macelobby-auth.jhsuttonca.workers.dev';
+// EDIT after creating your Turnstile widget in Cloudflare dashboard:
+//   Cloudflare → Turnstile → Add Site → use attackstudios.github.io
+//   Replace this with your real sitekey.
+//   Currently: official Cloudflare testing key (always passes — does not
+//   actually protect anything until swapped for a production key).
+const TURNSTILE_SITEKEY = '1x00000000000000000000AA';
+// ============================================================
 
 const $ = (id) => document.getElementById(id);
 const subtitle = $('subtitle');
@@ -17,6 +23,31 @@ const passwordInput = $('password');
 const revealBtn = $('reveal-password');
 
 let mode = 'signup';
+let turnstileToken = null;
+let turnstileWidgetId = null;
+
+function renderTurnstile() {
+  if (!window.turnstile) {
+    setTimeout(renderTurnstile, 100);
+    return;
+  }
+  if (turnstileWidgetId !== null) {
+    window.turnstile.reset(turnstileWidgetId);
+    return;
+  }
+  turnstileWidgetId = window.turnstile.render('#turnstile-container', {
+    sitekey: TURNSTILE_SITEKEY,
+    theme: 'dark',
+    size: 'normal',
+    callback: (token) => { turnstileToken = token; },
+    'error-callback': () => {
+      turnstileToken = null;
+      setStatus('Verification error. Refresh to retry.');
+    },
+    'expired-callback': () => { turnstileToken = null; },
+    'timeout-callback': () => { turnstileToken = null; },
+  });
+}
 
 function setStatus(text, kind) {
   statusEl.textContent = text || '';
@@ -92,6 +123,7 @@ async function init() {
   form.hidden = false;
   setMode(data.isSignup ? 'signup' : 'login');
   passwordInput.focus();
+  renderTurnstile();
 }
 
 form.addEventListener('submit', async (e) => {
@@ -106,6 +138,10 @@ form.addEventListener('submit', async (e) => {
     setStatus('Passwords do not match.');
     return;
   }
+  if (!turnstileToken) {
+    setStatus('Please complete the verification check.');
+    return;
+  }
 
   submitBtn.disabled = true;
   setStatus(mode === 'signup' ? 'Creating account…' : 'Logging in…', 'info');
@@ -115,11 +151,13 @@ form.addEventListener('submit', async (e) => {
     r = await fetch(`${AUTH_API}/api/${mode}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ code, password }),
+      body: JSON.stringify({ code, password, turnstileToken }),
     });
   } catch (err) {
     setStatus('Network error. Check your connection.');
     submitBtn.disabled = false;
+    if (turnstileWidgetId !== null) window.turnstile.reset(turnstileWidgetId);
+    turnstileToken = null;
     return;
   }
   let data = {};
@@ -128,6 +166,8 @@ form.addEventListener('submit', async (e) => {
   if (!r.ok || !data.ok) {
     setStatus(data.error || 'Authentication failed.');
     submitBtn.disabled = false;
+    if (turnstileWidgetId !== null) window.turnstile.reset(turnstileWidgetId);
+    turnstileToken = null;
     return;
   }
 
