@@ -26,27 +26,46 @@ let mode = 'signup';
 let turnstileToken = null;
 let turnstileWidgetId = null;
 
-function renderTurnstile() {
-  if (!window.turnstile) {
-    setTimeout(renderTurnstile, 100);
+function renderTurnstile(attempt) {
+  attempt = attempt || 0;
+  if (!window.turnstile || !window.__turnstileReady) {
+    if (attempt > 60) {
+      console.error('[turnstile] script never loaded after 6s');
+      const c = document.getElementById('turnstile-container');
+      if (c) c.innerHTML = '<span style="color:#f87171;font-size:12px">Verification failed to load. Disable adblocker / try another browser.</span>';
+      return;
+    }
+    setTimeout(() => renderTurnstile(attempt + 1), 100);
     return;
   }
   if (turnstileWidgetId !== null) {
+    console.log('[turnstile] reset existing widget');
     window.turnstile.reset(turnstileWidgetId);
     return;
   }
-  turnstileWidgetId = window.turnstile.render('#turnstile-container', {
-    sitekey: TURNSTILE_SITEKEY,
-    theme: 'dark',
-    size: 'normal',
-    callback: (token) => { turnstileToken = token; },
-    'error-callback': () => {
-      turnstileToken = null;
-      setStatus('Verification error. Refresh to retry.');
-    },
-    'expired-callback': () => { turnstileToken = null; },
-    'timeout-callback': () => { turnstileToken = null; },
-  });
+  console.log('[turnstile] rendering widget, sitekey=' + TURNSTILE_SITEKEY);
+  try {
+    turnstileWidgetId = window.turnstile.render('#turnstile-container', {
+      sitekey: TURNSTILE_SITEKEY,
+      theme: 'dark',
+      size: 'normal',
+      callback: (token) => {
+        console.log('[turnstile] token received');
+        turnstileToken = token;
+      },
+      'error-callback': (err) => {
+        console.error('[turnstile] error:', err);
+        turnstileToken = null;
+        setStatus('Verification error: ' + (err || 'unknown'));
+      },
+      'expired-callback': () => { turnstileToken = null; },
+      'timeout-callback': () => { turnstileToken = null; },
+    });
+    console.log('[turnstile] render returned widgetId=' + turnstileWidgetId);
+  } catch (e) {
+    console.error('[turnstile] render threw:', e);
+    setStatus('Captcha render failed: ' + e.message);
+  }
 }
 
 function setStatus(text, kind) {
