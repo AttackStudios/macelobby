@@ -148,7 +148,6 @@ body::before {
 
 .field:nth-of-type(1) { animation-delay: 400ms; }
 .field:nth-of-type(2) { animation-delay: 460ms; }
-.field:nth-of-type(3) { animation-delay: 520ms; }
 
 .field input {
   width: 100%;
@@ -190,12 +189,6 @@ body::before {
 }
 
 .field.has-toggle input { padding-right: 44px; }
-
-#code {
-  font-variant-numeric: tabular-nums;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-}
 
 .reveal {
   position: absolute;

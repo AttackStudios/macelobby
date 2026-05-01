@@ -123,12 +123,6 @@ document.querySelectorAll('.tab').forEach((t) => {
   t.addEventListener('click', () => setMode(t.dataset.mode));
 });
 
-codeInput.addEventListener('input', () => {
-  const start = codeInput.selectionStart;
-  codeInput.value = codeInput.value.toUpperCase();
-  codeInput.setSelectionRange(start, start);
-});
-
 revealBtn.addEventListener('click', () => {
   const pressed = revealBtn.getAttribute('aria-pressed') === 'true';
   const next = !pressed;
