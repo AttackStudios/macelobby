@@ -78,12 +78,22 @@ body::before {
   animation: childIn 540ms var(--quint-out) 220ms forwards;
 }
 
+.brand-id {
+  margin-top: 4px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  opacity: 0;
+  animation: childIn 540ms var(--quint-out) 250ms forwards;
+}
+
 .brand-sub {
-  margin-top: 6px;
+  margin-top: 8px;
   font-size: 13px;
   color: var(--text-dim);
   opacity: 0;
-  animation: childIn 540ms var(--quint-out) 280ms forwards;
+  animation: childIn 540ms var(--quint-out) 290ms forwards;
 }
 
 @keyframes childIn {
@@ -275,5 +285,5 @@ body::before {
     transition-duration: 0ms !important;
   }
   .card { opacity: 1; transform: none; }
-  .brand h1, .brand-sub, .tabs, .field, .submit { opacity: 1; transform: none; }
+  .brand h1, .brand-id, .brand-sub, .tabs, .field, .submit { opacity: 1; transform: none; }
 }
