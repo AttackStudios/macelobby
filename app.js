@@ -6,7 +6,7 @@ const AUTH_API = 'https://macelobby-auth.jhsuttonca.workers.dev';
 //   Replace this with your real sitekey.
 //   Currently: official Cloudflare testing key (always passes — does not
 //   actually protect anything until swapped for a production key).
-const TURNSTILE_SITEKEY = '1x00000000000000000000AA';
+const TURNSTILE_SITEKEY = '0x4AAAAAADHLZQNZdiKrZZOV';
 // ============================================================
 
 const $ = (id) => document.getElementById(id);
