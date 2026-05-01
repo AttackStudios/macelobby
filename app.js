@@ -21,8 +21,13 @@ const confirmInput = $('confirm');
 const codeInput = $('code');
 const passwordInput = $('password');
 const revealBtn = $('reveal-password');
+const forgotLink = $('forgot-link');
+const backToLoginLink = $('back-to-login');
+const passwordLabel = $('password-label');
+const confirmLabelText = $('confirm-label-text');
 
 let mode = 'signup';
+let lastNonResetMode = 'login';
 let turnstileToken = null;
 let turnstileWidgetId = null;
 
@@ -75,19 +80,44 @@ function setStatus(text, kind) {
 
 function setMode(m) {
   mode = m;
+  if (m === 'signup' || m === 'login') lastNonResetMode = m;
+
   document.querySelectorAll('.tab').forEach((t) => {
     t.classList.toggle('active', t.dataset.mode === m);
   });
+  tabs.hidden = (m === 'reset');
+
   if (m === 'signup') {
     confirmField.style.display = '';
     confirmInput.required = true;
     submitBtn.textContent = 'Sign Up';
-  } else {
+    passwordLabel.textContent = 'Password';
+    confirmLabelText.textContent = 'Confirm password';
+    forgotLink.hidden = true;
+    backToLoginLink.hidden = true;
+  } else if (m === 'login') {
     confirmField.style.display = 'none';
     confirmInput.required = false;
+    confirmInput.value = '';
     submitBtn.textContent = 'Log In';
+    passwordLabel.textContent = 'Password';
+    forgotLink.hidden = false;
+    backToLoginLink.hidden = true;
+  } else if (m === 'reset') {
+    confirmField.style.display = '';
+    confirmInput.required = true;
+    submitBtn.textContent = 'Reset password';
+    passwordLabel.textContent = 'New password';
+    confirmLabelText.textContent = 'Confirm new password';
+    passwordInput.value = '';
+    confirmInput.value = '';
+    forgotLink.hidden = true;
+    backToLoginLink.hidden = false;
   }
 }
+
+forgotLink.addEventListener('click', (e) => { e.preventDefault(); setMode('reset'); passwordInput.focus(); });
+backToLoginLink.addEventListener('click', (e) => { e.preventDefault(); setMode(lastNonResetMode); passwordInput.focus(); });
 
 document.querySelectorAll('.tab').forEach((t) => {
   t.addEventListener('click', () => setMode(t.dataset.mode));

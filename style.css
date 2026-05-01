@@ -222,6 +222,27 @@ body::before {
 .reveal[aria-pressed="true"] .eye-open { display: none; }
 .reveal[aria-pressed="true"] .eye-closed { display: block; }
 
+.link-row {
+  display: block;
+  margin: -4px 0 0 2px;
+  font-size: 12px;
+  color: var(--text-dim);
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  align-self: flex-start;
+  cursor: pointer;
+  transition: color 180ms var(--snap);
+}
+
+.link-row:hover { color: var(--accent); }
+
+#back-to-login {
+  text-align: center;
+  margin-top: 10px;
+  width: 100%;
+  align-self: center;
+}
+
 .captcha {
   margin-top: 4px;
   text-align: center;
