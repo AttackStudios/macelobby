@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MaceLobby — Authenticate</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="bg" aria-hidden="true"></div>
+  <main class="panel">
+    <h1 class="title">MaceLobby</h1>
+    <p class="subtitle" id="subtitle">Loading…</p>
+
+    <div class="tabs" id="tabs" hidden>
+      <button class="tab" data-mode="signup" type="button">Sign Up</button>
+      <button class="tab" data-mode="login" type="button">Log In</button>
+    </div>
+
+    <form id="auth-form" hidden>
+      <label>
+        <span>Code</span>
+        <input
+          id="code"
+          name="code"
+          type="text"
+          autocomplete="off"
+          spellcheck="false"
+          maxlength="8"
+          required
+        />
+      </label>
+      <label>
+        <span>Password</span>
+        <input id="password" name="password" type="password" minlength="8" required />
+      </label>
+      <label id="confirm-label">
+        <span>Confirm Password</span>
+        <input id="confirm" name="confirm" type="password" minlength="8" />
+      </label>
+      <button type="submit" class="mc-btn" id="submit-btn">Sign Up</button>
+    </form>
+
+    <div id="status" class="status"></div>
+
+    <div id="success" class="success-box" hidden>
+      <p class="success-line">Welcome, <span id="success-name"></span>!</p>
+      <p class="hint">Return to your Minecraft client &mdash; you've been teleported in.</p>
+    </div>
+
+    <p class="footer">vanilla-client compatible &middot; powered by Paper + Cloudflare</p>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
