@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MaceLobby — Sign In</title>
+  <title>MaceLobby — Verify</title>
   <link rel="stylesheet" href="style.css" />
   <script>
     window.onTurnstileLoad = function () { window.__turnstileReady = true; };
@@ -18,49 +18,20 @@
       <p class="brand-sub" id="subtitle">Loading…</p>
     </header>
 
-    <div class="tabs" id="tabs" hidden>
-      <button class="tab" data-mode="signup" type="button">Sign Up</button>
-      <button class="tab" data-mode="login" type="button">Log In</button>
-    </div>
+    <p class="instructions" id="instructions" hidden>
+      Verify you're human to enter the server.
+    </p>
 
-    <form id="auth-form" hidden novalidate>
+    <form id="verify-form" hidden novalidate>
       <input id="code" name="code" type="hidden" />
-
-      <div class="field has-toggle">
-        <input id="password" name="password" type="password" minlength="8" required placeholder=" " />
-        <label for="password" id="password-label">Password</label>
-        <button type="button" class="reveal" id="reveal-password" aria-label="Show password" aria-pressed="false">
-          <svg class="eye-open" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" />
-            <circle cx="12" cy="12" r="3" />
-          </svg>
-          <svg class="eye-closed" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M17.94 17.94A10.94 10.94 0 0 1 12 19c-6.5 0-10-7-10-7a18.55 18.55 0 0 1 4.05-5.06" />
-            <path d="M9.9 4.24A10.93 10.93 0 0 1 12 4c6.5 0 10 7 10 7a18.5 18.5 0 0 1-2.16 3.19" />
-            <path d="M14.12 14.12a3 3 0 1 1-4.24-4.24" />
-            <line x1="2" y1="2" x2="22" y2="22" />
-          </svg>
-        </button>
-      </div>
-
-      <a href="#" id="forgot-link" class="link-row" hidden>Forgot password?</a>
-
-      <div class="field" id="confirm-field">
-        <input id="confirm" name="confirm" type="password" minlength="8" placeholder=" " />
-        <label for="confirm" id="confirm-label-text">Confirm password</label>
-      </div>
-
       <div class="captcha" id="turnstile-container"></div>
-
-      <button type="submit" class="submit" id="submit-btn">Sign Up</button>
-
-      <a href="#" id="back-to-login" class="link-row" hidden>Back to log in</a>
+      <button type="submit" class="submit" id="submit-btn" disabled>Continue</button>
     </form>
 
     <div id="status" class="status" role="status" aria-live="polite"></div>
 
     <div id="success" class="success" hidden>
-      <p class="success-line">Welcome, <span id="success-name"></span>.</p>
+      <p class="success-line">Verified, <span id="success-name"></span>.</p>
       <p class="success-hint">Return to your Minecraft client — you've been teleported in.</p>
     </div>
   </main>
