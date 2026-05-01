@@ -2,7 +2,7 @@
 // EDIT THIS LINE after deploying your Cloudflare Worker.
 // You'll get the URL after running `wrangler deploy`.
 // ============================================================
-const AUTH_API = 'https://macelobby-auth.YOUR-CF-SUBDOMAIN.workers.dev';
+const AUTH_API = 'https://macelobby-auth.jhsuttonca.workers.dev';
 
 const $ = (id) => document.getElementById(id);
 const subtitle = $('subtitle');
